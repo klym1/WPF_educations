@@ -1,0 +1,36 @@
+﻿<Window x:Class="MoviesServiceClient.WPF.TestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MoviesServiceClient.WPF"
+        mc:Ignorable="d"
+        Title="Test asd d" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+       <TextBox Grid.Column="1"></TextBox>
+        
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+            <Button Height="27" Content="My button">
+               
+            </Button>
+            <Button Height="27"></Button>
+            <StackPanel>
+                <ListBox>
+                    <ListBoxItem Content="1"></ListBoxItem>
+                    <ListBoxItem Content="2"></ListBoxItem>
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+        
+    </Grid>
+</Window>

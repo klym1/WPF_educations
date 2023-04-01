@@ -1,0 +1,125 @@
+﻿<Page x:Class="MoviesServiceClient.WPF.Contacts.ContactList.ContactListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:viewModel="clr-namespace:MoviesServiceClient.WPF.ViewModel"
+      xmlns:contactList="clr-namespace:MoviesServiceClient.WPF.Contacts.ContactList"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:behaviours="clr-namespace:MoviesServiceClient.WPF.Behaviours"
+      mc:Ignorable="d" 
+      d:DesignHeight="230.408" d:DesignWidth="503.679"
+      x:Name="pageRoot" Title="MoviesListView">
+<Page.Resources>
+        <DataTemplate x:Key="ButtonContentTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Grid Height="8" Width="8">
+                    <Path HorizontalAlignment="Stretch" 
+           Margin="0,0,1.8,1.8" 
+           VerticalAlignment="Stretch" Stretch="Fill" Stroke="#FF000000" 
+           Data="M0.5,5.7 L0.5,0.5 L5.7,0.5"/>
+                    <Path HorizontalAlignment="Stretch" 
+           Margin="2,3,0,0" 
+           VerticalAlignment="Stretch" Stretch="Fill" Stroke="#FFFFFFFF" 
+           Data="M3.2,7.5 L7.5,7.5 L7.5,3.5"/>
+                    <Path HorizontalAlignment="Stretch" 
+           Margin="1.2,1.4,0.7,0.7" 
+           VerticalAlignment="Stretch" Fill="#FFFFFFFF" Stretch="Fill" Stroke="#FF000000" 
+           Data="M2.5,2.5 L7.5,7.5"/>
+                    <Path HorizontalAlignment="Stretch" 
+           Margin="1.7,2.0,1,1" 
+           VerticalAlignment="Stretch" Stretch="Fill" Stroke="#FF000000" 
+           Data="M3,7.5 L7.5,7.5 L7.5,3.5"/>
+                    <Path HorizontalAlignment="Stretch" 
+           Margin="1,1,1,1" 
+           VerticalAlignment="Stretch" Stretch="Fill" Stroke="#FFFFFFFF" 
+           Data="M1.5,6.5 L1.5,1 L6.5,1.5"/>
+                </Grid>
+                <ContentPresenter Content="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
+        <ControlTemplate TargetType="Button" x:Key="ButtonControlTemplate">
+            <Grid>
+                <Ellipse Fill="{TemplateBinding Background}"/>
+                <ContentPresenter HorizontalAlignment="Center"
+              VerticalAlignment="Center"/>
+            </Grid>
+        </ControlTemplate>
+    </Page.Resources>    
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource PageLoadAnim}" />
+        </EventTrigger>
+    </Page.Triggers>
+    <Grid Background="{DynamicResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+    <Button Template="{StaticResource ButtonControlTemplate}" ContentTemplate="{StaticResource ButtonContentTemplate}" Content="1"/>
+    <Button Template="{StaticResource ButtonControlTemplate}" ContentTemplate="{StaticResource ButtonContentTemplate}" Content="2"/>
+    <Button Template="{StaticResource ButtonControlTemplate}" ContentTemplate="{StaticResource ButtonContentTemplate}" Content="3"/>
+  </StackPanel>
+        <TextBlock Text="Contacts" FontSize="28" FontWeight="Thin" Margin="24,10,0,15" Foreground="{DynamicResource ForegroundBrush}"/>
+            <Button Command="{Binding AddContactCommand}" Margin="8,20,0,15" BorderThickness="0">
+                <Button.Template >
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Path Fill="{DynamicResource ForegroundBrush}" Data="{StaticResource PlusCircleOutline}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+              
+                
+            </Button>
+        </StackPanel>
+        <!--        <Path Grid.Row="0" Data="{StaticResource AddIcon}" Fill="{DynamicResource SidebarForegroundBrush}" HorizontalAlignment="Left" Stretch="Uniform" Width="10" Margin="130,3,0,0"/>-->
+        
+        <Rectangle Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Fill="{DynamicResource ForegroundBrush}" SnapsToDevicePixels="True" Margin="0,0,0,0" Opacity="0.15"/>
+
+        <ListBox Grid.Row="1" Padding="0,0,0,10" Margin="0,12,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ItemsSource="{Binding ContactModels}"
+                 Foreground="White"
+                 Style="{StaticResource CommonListBoxStyle}"
+                 ItemContainerStyle="{StaticResource MainMenuListBoxItemStyle}"
+                 HorizontalContentAlignment="Stretch"
+                 SelectedItem="{Binding SelectedContactModel}"
+                 MouseDoubleClick="Control_OnMouseDoubleClick">
+            <i:Interaction.Behaviors>
+                <behaviours:TransitionBehaviour Transition="{StaticResource PageLoadAnim}" TransitionDelay="25"/>
+            </i:Interaction.Behaviors>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Tag="{Binding DataContext, ElementName=pageRoot}" Text="{Binding FullName}" FontWeight="Regular" FontSize="14">
+                        <TextBlock.ContextMenu>
+                                <ContextMenu Visibility="{Binding Converter={StaticResource AlbumContextMenuVisibilityConverter}}" Style="{StaticResource CommonContextMenuStyle}" Focusable="False">
+                                <MenuItem Header="Edit Details" Command="{Binding PlacementTarget.Tag.EditDetailsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Delete" Command="{Binding PlacementTarget.Tag.DeleteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
+                </DataTemplate>
+              
+            </ListBox.ItemTemplate>
+            <ListBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding EditDetailsCommand}" />
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding EditDetailsCommand}"  />
+            </ListBox.InputBindings>
+        </ListBox>
+
+
+    </Grid>
+</Page>
